@@ -175,16 +175,29 @@ const ProductDetails = () => {
   const addCart = async () => {
     setCartLoading(true);
     const token = localStorage.getItem("krist-app-token");
-    await addToCart(token, { productId: product?._id, quantity: 1 })
-      .then((res) => {
-        setCartLoading(false);
-        showAddToCartToast(product?.title || "Product");
-        navigate("/cart");
-      })
-      .catch((err) => {
-        setCartLoading(false);
-        showErrorToast(err.message);
-      });
+    
+    if (!token) {
+      setCartLoading(false);
+      dispatch(
+        openSnackbar({
+          message: "Please sign in to add items to cart",
+          severity: "warning",
+        })
+      );
+      navigate("/login");
+      return;
+    }
+
+    try {
+      await addToCart(token, { productId: product?._id, quantity: 1 });
+      showAddToCartToast(product?.title || "Product");
+      navigate("/cart");
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      showErrorToast(err.response?.data?.message || "Failed to add item to cart");
+    } finally {
+      setCartLoading(false);
+    }
   };
   const checkFavourite = async () => {
     const token = localStorage.getItem("krist-app-token");

@@ -23,7 +23,7 @@ export const createPaymentIntent = async (req, res) => {
     }
 };
 
-// Handle successful payment
+// Handle successful payment , goes to stripe website and checks for the success of the order
 export const handleSuccessfulPayment = async (req, res) => {
     try {
         const { paymentIntentId } = req.body;

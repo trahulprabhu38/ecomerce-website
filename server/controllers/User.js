@@ -66,10 +66,31 @@ export const addToCart = async (req, res, next) => {
   try {
     const { productId, quantity } = req.body;
     const userJWT = req.user;
+    
+    if (!userJWT || !userJWT.id) {
+      return next(createError(401, "Invalid user token"));
+    }
+
+    // Find user and check if they exist
     const user = await users.findById(userJWT.id);
+    if (!user) {
+      return next(createError(404, "User not found. Please log in again."));
+    }
+
+    // Initialize cart if it doesn't exist
+    if (!user.cart) {
+      user.cart = [];
+    }
+
+    // Validate productId
+    if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+      return next(createError(400, "Invalid product ID"));
+    }
+
     const existingCartItemIndex = user.cart.findIndex((item) =>
       item?.product?.equals(productId)
     );
+    
     if (existingCartItemIndex !== -1) {
       // Product is already in the cart, update the quantity
       user.cart[existingCartItemIndex].quantity += quantity;
@@ -77,12 +98,14 @@ export const addToCart = async (req, res, next) => {
       // Product is not in the cart, add it
       user.cart.push({ product: productId, quantity });
     }
+    
     await user.save();
 
     return res
       .status(200)
       .json({ message: "Product added to cart successfully", user });
   } catch (err) {
+    console.error('Add to cart error:', err);
     next(err);
   }
 };
@@ -123,13 +146,29 @@ export const removeFromCart = async (req, res, next) => {
 export const getAllCartItems = async (req, res, next) => {
   try {
     const userJWT = req.user;
+    
+    if (!userJWT || !userJWT.id) {
+      return next(createError(401, "Invalid user token"));
+    }
+
     const user = await users.findById(userJWT.id).populate({
       path: "cart.product",
       model: "Products",
     });
-    const cartItems = user.cart;
-    return res.status(200).json(cartItems);
+
+    if (!user) {
+      return next(createError(404, "User not found. Please log in again."));
+    }
+
+    // Initialize cart if it doesn't exist
+    if (!user.cart) {
+      user.cart = [];
+      await user.save();
+    }
+
+    return res.status(200).json(user.cart);
   } catch (err) {
+    console.error('Get cart items error:', err);
     next(err);
   }
 };

@@ -8,13 +8,15 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 dotenv.config();
 
 const app = express();
+
+//to parse the frontend data and also connect to frontend
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
 
-//error handel
+//error handeling function
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || "Something went wrong";

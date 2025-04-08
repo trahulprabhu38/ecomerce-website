@@ -168,10 +168,33 @@ const Cart = () => {
   const getProducts = async () => {
     setLoading(true);
     const token = localStorage.getItem("krist-app-token");
-    await getCart(token).then((res) => {
-      setProducts(res.data);
+    
+    if (!token) {
       setLoading(false);
-    });
+      dispatch(
+        openSnackbar({
+          message: "Please sign in to view your cart",
+          severity: "warning",
+        })
+      );
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const res = await getCart(token);
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+      dispatch(
+        openSnackbar({
+          message: err.response?.data?.message || "Failed to load cart",
+          severity: "error",
+        })
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const addCart = async (id) => {

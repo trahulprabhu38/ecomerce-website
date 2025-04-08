@@ -1,7 +1,10 @@
 import axios from "axios";
 
+/// to connect To connect front-end and backend, axios. this connects to the url of the backend and shares data.
+
+
 const API = axios.create({
-  baseURL: "http://localhost:8080/api/",
+  baseURL: "https://ecomerce-website-ynde.onrender.com",
 });
 
 // Add request interceptor
@@ -82,3 +85,6 @@ export const getOrders = async (token) =>
   await API.get(`/user/order/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+
+

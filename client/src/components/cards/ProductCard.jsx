@@ -220,18 +220,36 @@ const ProductCard = ({ product }) => {
 
   const addCart = async () => {
     const token = localStorage.getItem("krist-app-token");
-    await addToCart(token, { productId: product?._id, quantity: 1 })
-      .then((res) => {
-        navigate("/cart");
-      })
-      .catch((err) => {
-        dispatch(
-          openSnackbar({
-            message: err.message,
-            severity: "error",
-          })
-        );
-      });
+    
+    if (!token) {
+      dispatch(
+        openSnackbar({
+          message: "Please sign in to add items to cart",
+          severity: "warning",
+        })
+      );
+      navigate("/login");
+      return;
+    }
+
+    try {
+      await addToCart(token, { productId: product?._id, quantity: 1 });
+      dispatch(
+        openSnackbar({
+          message: "Item added to cart successfully",
+          severity: "success",
+        })
+      );
+      navigate("/cart");
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      dispatch(
+        openSnackbar({
+          message: err.response?.data?.message || "Failed to add item to cart",
+          severity: "error",
+        })
+      );
+    }
   };
 
   useEffect(() => {
@@ -257,7 +275,7 @@ const ProductCard = ({ product }) => {
               </>
             )}
           </MenuItem>{" "}
-          <MenuItem onClick={() => addCart(product?.id)}>
+          <MenuItem onClick={() => addCart()}>
             <AddShoppingCartOutlined
               sx={{ color: "inherit", fontSize: "20px" }}
             />

@@ -34,10 +34,23 @@ export const verifyToken = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT);
-    req.user = decoded;
+    
+    // Verify that the decoded token has an id
+    if (!decoded || !decoded.id) {
+      return next(createError(401, "Invalid token format!"));
+    }
 
+    req.user = decoded;
     next();
   } catch (err) {
-    next(createError(403, "Token is invalid or expired!"));
+    if (err.name === 'TokenExpiredError') {
+      return next(createError(401, "Token has expired!"));
+    }
+    if (err.name === 'JsonWebTokenError') {
+      return next(createError(401, "Invalid token!"));
+    }
+    next(createError(403, "Token verification failed!"));
   }
 };
+
+

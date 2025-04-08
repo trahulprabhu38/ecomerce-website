@@ -132,6 +132,7 @@ const NewArrivals = () => {
         <Title>New Arrivals</Title>
         <Subtitle>Discover our latest collection of trendy products</Subtitle>
         <ProductGrid>
+        
           {products.map((product) => (
             <ProductCard
               key={product._id}
@@ -152,5 +153,7 @@ const NewArrivals = () => {
     </Container>
   );
 };
+
+//collects data from database and prints in a loop
 
 export default NewArrivals; 
