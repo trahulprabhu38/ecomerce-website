@@ -1,0 +1,50 @@
+[{
+  "_id": {
+    "$oid": "67d0f7c2c0325fbfa26e48f6"
+  },
+  "name": "patient",
+  "email": "patient@gmail.com",
+  "password": "$2a$10$ZWnHTqYyGJb584KZJSAOPew8uBaHHJMWHyPvwwpmt2ZsBR3DK/RIC",
+  "role": "patient",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2025-03-12T02:56:02.102Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67d0f9e307976c2e810da83d"
+  },
+  "name": "admin",
+  "email": "admin@gmail.com",
+  "password": "$2a$10$ZWnHTqYyGJb584KZJSAOPew8uBaHHJMWHyPvwwpmt2ZsBR3DK/RIC",
+  "role": "admin",
+  "isVerified": false,
+  "createdAt": {
+    "$date": "2025-03-12T02:56:02.102Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67d0fa43c0325fbfa26e4921"
+  },
+  "name": "staff",
+  "email": "staff@gmail.com",
+  "password": "$2a$10$b2KaGnC.kN0bcHSCkn6Kpe2yKzbjziuAdHOMmwuySig7MTPolILa.",
+  "role": "medical_staff",
+  "isVerified": true,
+  "hospital": {
+    "name": "dsce",
+    "address": "1049, 14th cross , 25th main  , bsk-2nd stage bangalore-70",
+    "department": "immunology ",
+    "position": "dean of medicine",
+    "staffId": "237898798",
+    "contact": "06362097529"
+  },
+  "createdAt": {
+    "$date": "2025-03-12T03:06:43.176Z"
+  },
+  "__v": 0
+}]
