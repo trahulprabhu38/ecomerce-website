@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 const API = axios.create({
-  baseURL: "https://ecomerce-website-ynde.onrender.com",
+  baseURL: "https://ecomerce-website-ynde.onrender.com/api",
 });
 
 // Add request interceptor
